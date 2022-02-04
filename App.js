@@ -1,10 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import { back, bicep, chest, shoulder, tricep, quadricep, hamstring, glute, calf, ab } from './exercises';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      <Text>Dumbbell Randomizer</Text>
       <StatusBar style="auto" />
     </View>
   );
