@@ -64,7 +64,6 @@ function ExerAmtScreen({ navigation, route }) {
     }, [])
 
     const updateMuscleGroup = (muscle) => {
-        console.log(muscleGroup);
         let tempGroup = [];
         for (let i = 0; i < muscleGroup.length; i++) {
             if (muscle[0] == muscleGroup[i][0]) {
@@ -78,8 +77,8 @@ function ExerAmtScreen({ navigation, route }) {
         setMuscleGroup(tempGroup);
     }
 
-    const setToNewRoutineScreen = () => {
-        navigation.navigate('NewRoutine');
+    const setToNewRoutineScreen = (group) => {
+        navigation.navigate('NewRoutine', group);
       }
 
     return (
@@ -88,12 +87,12 @@ function ExerAmtScreen({ navigation, route }) {
                 {muscleGroup.map((muscle, index) => 
                     <View key={index}>
                         <Text>{muscle[0]}</Text>
-                        <NumericInput minValue={0} maxValue={5} initValue={muscle[1]} onChange={value => {updateMuscleGroup([muscle[0], value])}} />
+                        <NumericInput minValue={0} maxValue={5} value={muscle[1]} onChange={value => {updateMuscleGroup([muscle[0], value])}} />
                     </View>
                 )}
             </ScrollView>
             <View style={exerAmtScreenStyles.actionBarContainer}>
-                <TouchableOpacity onPress={() => {setToNewRoutineScreen()}}>
+                <TouchableOpacity onPress={() => {setToNewRoutineScreen(muscleGroup)}}>
                 <View style={exerAmtScreenStyles.addButtonContainer}>
                     <Text style={exerAmtScreenStyles.addButton}>+</Text>
                 </View>

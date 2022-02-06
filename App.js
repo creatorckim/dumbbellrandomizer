@@ -10,7 +10,7 @@ import ExerAmtScreen from './components/ExerAmtScreen';
 import NewRoutineScreen from './components/NewRoutineScreen';
 
 
-function RoutineScreen({navigation, route}) {
+function HomeScreen({navigation, route}) {
 
 
   const setToExerAmtScreen = (pickedRoutine) => {
@@ -65,8 +65,8 @@ export default function App() {
 
   return (
     <NavigationContainer style={styles.navContainer}>
-      <Stack.Navigator initialRouteName='Routine'>
-        <Stack.Screen name='Routine' component={RoutineScreen} style={styles.nav} options={{ headerShown: false }}/>
+      <Stack.Navigator initialRouteName='Home'>
+        <Stack.Screen name='Home' component={HomeScreen} style={styles.nav} options={{ headerShown: false }}/>
         <Stack.Screen name='ExerAmt' component={ExerAmtScreen} style={styles.nav} options={{ headerShown: false }}/>
         <Stack.Screen name='NewRoutine' component={NewRoutineScreen} style={styles.nav} options={{ headerShown: false }}/>
       </Stack.Navigator>
