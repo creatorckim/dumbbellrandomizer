@@ -8,16 +8,27 @@ import ActionSheet, { SheetManager } from "react-native-actions-sheet";
 import ExerAmtScreen from './components/ExerAmtScreen';
 import NewRoutineScreen from './components/NewRoutineScreen';
 import ExerciseDetail from './components/ExerciseDetail';
+import uuid from 'react-native-uuid';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 function HomeScreen({navigation, route}) {
 
+  const [routine, setRoutine] = useState('');
   const [exercises, setExercises] = useState([]);
+  const [showButton, setShowButton] = useState(false);
+  const [exerciseArray, setExerciseArray] = useState([]);
+
+  useEffect(() => {
+    getAllData();
+  })
+
 
   useEffect(() => {
 
       if (route.params?.exerciseList) {
         showExercises(route.params?.exerciseList);
+  
       }
 
   }, [route.params?.exerciseList])
@@ -25,24 +36,69 @@ function HomeScreen({navigation, route}) {
 
   const setToExerAmtScreen = (pickedRoutine) => {
     SheetManager.hideAll();
+    setRoutine(pickedRoutine);
     navigation.navigate('ExerAmt', pickedRoutine);
   }
 
   const showExercises = (data) => {
     setExercises(data);
+    setShowButton(true);
+  }
+
+  const routineObj = (routine, array) => {
+    let randomKey = uuid.v1();
+    let tempObj = {'key': randomKey, 'routine': routine, 'exerciseArray': array};
+
+    saveRoutine(tempObj);
+  }
+
+  const saveRoutine = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem(value.key, jsonValue)
+    } catch (e) {
+      console.log(e);
+    }
+
+  }
+
+  const getAllData = async () => {
+    try {  
+      const keys = await AsyncStorage.getAllKeys();  
+      const resultArray = [];
+      await AsyncStorage.multiGet(keys).then(key => {
+        key.forEach(data => {
+          resultArray.push(JSON.parse(data[1]));
+        });
+      });
+
+      console.log(resultArray);
+   } catch (e) {
+      console.log(e);
+   }
   }
 
   return(
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <ScrollView style={styles.scrollView}>
-        {exercises.map((exercise, index) => 
-          <ExerciseDetail key={index} name={exercise}/>
-            // <View key={index}>
-            //     <Text>{exercise}</Text>
-            // </View>
-        )}
-      </ScrollView>
+      {
+        exercises.length != 0 ? 
+          <ScrollView style={styles.scrollView}>
+            {exercises.map((exercise, index) => 
+              <ExerciseDetail key={index} name={exercise} exerciseArray={exerciseArray}/>
+            )}
+        </ScrollView> : <Text>No exercises</Text>
+      }
+      {
+        showButton ? 
+        <View style={styles.actionBarContainer}>
+          <TouchableOpacity onPress={() => {routineObj(routine, exerciseArray); setExercises([]); setShowButton(false)}}>
+            <View style={styles.addButtonContainer}>
+                <Text style={styles.addButton}>+</Text>
+            </View>
+          </TouchableOpacity>
+        </View> : null
+      }
       <ActionSheet id="routine_sheet">
         <View style={styles.sheetButtons}>
           <TouchableOpacity onPress={() => {setToExerAmtScreen('push')}}>
