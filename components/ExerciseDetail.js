@@ -10,6 +10,8 @@ function ExerciseDetail(props) {
 
     const saveSets = (repInput, weightInput) => {
         let tempArray = [...sets];
+        // let tempExerciseArray = props.exerciseArray;
+        // props.setExerciseArray(...tempExerciseArray, [props.name, repInput, weightInput]);
         props.exerciseArray.push([props.name, repInput, weightInput]);
         tempArray.push([props.name, repInput, weightInput]);
         setSets(tempArray);

@@ -6,10 +6,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ActionSheet, { SheetManager } from "react-native-actions-sheet";
 import ExerAmtScreen from './components/ExerAmtScreen';
-import NewRoutineScreen from './components/NewRoutineScreen';
 import ExerciseDetail from './components/ExerciseDetail';
 import uuid from 'react-native-uuid';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import CalendarView from './components/CalendarView';
 
 
 function HomeScreen({navigation, route}) {
@@ -18,10 +18,11 @@ function HomeScreen({navigation, route}) {
   const [exercises, setExercises] = useState([]);
   const [showButton, setShowButton] = useState(false);
   const [exerciseArray, setExerciseArray] = useState([]);
+  const [dateArray, setDateArray] = useState([]);
 
   useEffect(() => {
-    getAllData();
-  })
+    getAllDate();
+  }, [])
 
 
   useEffect(() => {
@@ -47,36 +48,48 @@ function HomeScreen({navigation, route}) {
 
   const routineObj = (routine, array) => {
     let randomKey = uuid.v1();
-    let tempObj = {'key': randomKey, 'routine': routine, 'exerciseArray': array};
+    let date = new Date();
+    let isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0, 10);
+    let tempObj = {'key': randomKey, 'date': isoDateTime, 'routine': routine, 'exerciseArray': array};
 
-    saveRoutine(tempObj);
+    if (exerciseArray.length != 0) {
+      saveRoutine(tempObj);
+    }
+    
   }
 
   const saveRoutine = async (value) => {
     try {
       const jsonValue = JSON.stringify(value);
       await AsyncStorage.setItem(value.key, jsonValue)
+      getAllDate();
     } catch (e) {
       console.log(e);
     }
 
   }
 
-  const getAllData = async () => {
+  const getAllDate = async () => {
     try {  
       const keys = await AsyncStorage.getAllKeys();  
       const resultArray = [];
       await AsyncStorage.multiGet(keys).then(key => {
         key.forEach(data => {
-          resultArray.push(JSON.parse(data[1]));
+          // resultArray.push(JSON.parse(data[1]));
+          let tempObj = JSON.parse(data[1]);
+          // console.log(tempObj.date);
+          resultArray.push(tempObj.date);
         });
       });
 
-      console.log(resultArray);
+      setDateArray(resultArray);
+
+      // console.log(resultArray);
    } catch (e) {
       console.log(e);
    }
   }
+  
 
   return(
     <View style={styles.container}>
@@ -85,9 +98,9 @@ function HomeScreen({navigation, route}) {
         exercises.length != 0 ? 
           <ScrollView style={styles.scrollView}>
             {exercises.map((exercise, index) => 
-              <ExerciseDetail key={index} name={exercise} exerciseArray={exerciseArray}/>
+              <ExerciseDetail key={index} name={exercise} exerciseArray={exerciseArray} setExerciseArray={setExerciseArray}/>
             )}
-        </ScrollView> : <Text>No exercises</Text>
+        </ScrollView> : <CalendarView dateArray={dateArray}/>
       }
       {
         showButton ? 
@@ -137,9 +150,13 @@ export default function App() {
   return (
     <NavigationContainer style={styles.navContainer}>
       <Stack.Navigator initialRouteName='Home'>
-        <Stack.Screen name='Home' component={HomeScreen} style={styles.nav} options={{ headerTitle: 'DB Randomizer', headerRight: () => (<TouchableOpacity onPress={() => {SheetManager.show("routine_sheet")}}><Text>+</Text></TouchableOpacity>)}}/>
+        <Stack.Screen name='Home' component={HomeScreen} style={styles.nav} options={{ headerTitle: 'DB Randomizer',  headerRight: () => ( <TouchableOpacity onPress={() => {SheetManager.show("routine_sheet")}}><Text>+</Text></TouchableOpacity>
+        //   <View style={{flexDirection:"row"}}>
+        //     <TouchableOpacity style={{margin: 10}} onPress={() => {SheetManager.show("routine_sheet")}}><Text>+</Text></TouchableOpacity>
+        //     <TouchableOpacity onPress={() => {}}><Text>+</Text></TouchableOpacity>
+        //  </View>
+        )}}/>
         <Stack.Screen name='ExerAmt' component={ExerAmtScreen} style={styles.nav} options={{ headerShown: false }}/>
-        {/* <Stack.Screen name='NewRoutine' component={NewRoutineScreen} style={styles.nav} options={{ headerShown: false }}/> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

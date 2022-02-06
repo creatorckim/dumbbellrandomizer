@@ -153,10 +153,6 @@ function ExerAmtScreen({ navigation, route }) {
 
     }
 
-    // const setToNewRoutineScreen = (group) => {
-    //     navigation.navigate('NewRoutine', group);
-    //   }
-
     return (
         <View style={exerAmtScreenStyles.container}>
             <ScrollView style={exerAmtScreenStyles.scrollView}>
@@ -167,13 +163,6 @@ function ExerAmtScreen({ navigation, route }) {
                     </View>
                 )}
             </ScrollView>
-            {/* <ScrollView style={exerAmtScreenStyles.scrollView}>
-                {exercises.map((exercise, index) => 
-                    <View key={index}>
-                        <Text>{exercise}</Text>
-                    </View>
-                )}
-            </ScrollView> */}
             <View style={exerAmtScreenStyles.actionBarContainer}>
                 <TouchableOpacity onPress={() => {navigation.navigate({name: 'Home', params: {exerciseList : createRoutine()}, merge: true})}}>
                 <View style={exerAmtScreenStyles.addButtonContainer}>
