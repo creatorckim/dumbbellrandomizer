@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import NumericInput from 'react-native-numeric-input'
 import exerAmtScreenStyles from '../components/exerAmtScreenStyles';
+import { back, bicep, forearm, postdelt, trapezius, chest, shoulder, tricep, quadricep, hamstring, glute, calf, ab, oblique } from '../exercises';
 
 
 
 function ExerAmtScreen({ navigation, route }) {
 
     const [muscleGroup, setMuscleGroup] = useState([]);
+    const [exercises, setExercises] = useState([]);
 
     useEffect(() => {
 
@@ -77,9 +79,83 @@ function ExerAmtScreen({ navigation, route }) {
         setMuscleGroup(tempGroup);
     }
 
-    const setToNewRoutineScreen = (group) => {
-        navigation.navigate('NewRoutine', group);
-      }
+    const createRoutine = () => {
+        let tempExerciseArray = [];
+        for (let i = 0; i < muscleGroup.length; i++) {
+            switch(muscleGroup[i][0]) {
+                case 'back':
+                    pickRandomExercise(muscleGroup[i][1], back, tempExerciseArray);
+                    break;
+                case 'bicep':
+                    pickRandomExercise(muscleGroup[i][1], bicep, tempExerciseArray);
+                    break;
+                case 'forearm':
+                    pickRandomExercise(muscleGroup[i][1], forearm, tempExerciseArray);
+                    break;
+                case 'postdelt':
+                    pickRandomExercise(muscleGroup[i][1], postdelt, tempExerciseArray);
+                    break;
+                case 'trapezius':
+                    pickRandomExercise(muscleGroup[i][1], trapezius, tempExerciseArray);
+                    break;
+                case 'chest':
+                    pickRandomExercise(muscleGroup[i][1], chest, tempExerciseArray);
+                    break;
+                case 'shoulder':
+                    pickRandomExercise(muscleGroup[i][1], shoulder, tempExerciseArray);
+                    break;
+                case 'tricep':
+                    pickRandomExercise(muscleGroup[i][1], tricep, tempExerciseArray);
+                    break;
+                case 'quadricep':
+                    pickRandomExercise(muscleGroup[i][1], quadricep, tempExerciseArray);
+                    break;
+                case 'hamstring':
+                    pickRandomExercise(muscleGroup[i][1], hamstring, tempExerciseArray);
+                    break;
+                case 'glute':
+                    pickRandomExercise(muscleGroup[i][1], glute, tempExerciseArray);
+                    break;
+                case 'calf':
+                    pickRandomExercise(muscleGroup[i][1], calf, tempExerciseArray);
+                    break;
+                case 'ab':
+                    pickRandomExercise(muscleGroup[i][1], ab, tempExerciseArray);
+                    break;
+                case 'oblique':
+                    pickRandomExercise(muscleGroup[i][1], oblique, tempExerciseArray);
+                    break;
+                default:
+                    break;
+
+            }
+        }
+
+        setExercises(tempExerciseArray);
+
+        return tempExerciseArray;
+    }
+
+    const pickRandomExercise = (iteration, bodypart, array) => {
+        let numberOfExercises = iteration;
+        if (numberOfExercises > bodypart.length) {
+            numberOfExercises = bodypart.length
+        }
+        let set = new Set();
+        while (set.size < numberOfExercises) {
+            let randomIndex = Math.floor(Math.random() * bodypart.length);
+            set.add(bodypart[randomIndex].name);
+        }
+
+        let setArray = [...set];
+
+        array = array.push(...setArray);
+
+    }
+
+    // const setToNewRoutineScreen = (group) => {
+    //     navigation.navigate('NewRoutine', group);
+    //   }
 
     return (
         <View style={exerAmtScreenStyles.container}>
@@ -91,8 +167,15 @@ function ExerAmtScreen({ navigation, route }) {
                     </View>
                 )}
             </ScrollView>
+            {/* <ScrollView style={exerAmtScreenStyles.scrollView}>
+                {exercises.map((exercise, index) => 
+                    <View key={index}>
+                        <Text>{exercise}</Text>
+                    </View>
+                )}
+            </ScrollView> */}
             <View style={exerAmtScreenStyles.actionBarContainer}>
-                <TouchableOpacity onPress={() => {setToNewRoutineScreen(muscleGroup)}}>
+                <TouchableOpacity onPress={() => {navigation.navigate({name: 'Home', params: {exerciseList : createRoutine()}, merge: true})}}>
                 <View style={exerAmtScreenStyles.addButtonContainer}>
                     <Text style={exerAmtScreenStyles.addButton}>+</Text>
                 </View>

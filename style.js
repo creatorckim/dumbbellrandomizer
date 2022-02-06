@@ -17,6 +17,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
       },
+      scrollView: {
+        width: '100%',
+        height:'100%',
+      },
       actionBarContainer: {
         position: 'absolute',
         bottom: 0,

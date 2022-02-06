@@ -1,16 +1,26 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react'
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View, ScrollView } from 'react-native';
 import styles from './style';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ActionSheet, { SheetManager } from "react-native-actions-sheet";
-import { back, bicep, forearm, postdelt, trapezius, chest, shoulder, tricep, quadricep, hamstring, glute, calf, ab, oblique } from './exercises';
 import ExerAmtScreen from './components/ExerAmtScreen';
 import NewRoutineScreen from './components/NewRoutineScreen';
+import ExerciseDetail from './components/ExerciseDetail';
 
 
 function HomeScreen({navigation, route}) {
+
+  const [exercises, setExercises] = useState([]);
+
+  useEffect(() => {
+
+      if (route.params?.exerciseList) {
+        showExercises(route.params?.exerciseList);
+      }
+
+  }, [route.params?.exerciseList])
 
 
   const setToExerAmtScreen = (pickedRoutine) => {
@@ -18,16 +28,21 @@ function HomeScreen({navigation, route}) {
     navigation.navigate('ExerAmt', pickedRoutine);
   }
 
+  const showExercises = (data) => {
+    setExercises(data);
+  }
+
   return(
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <View style={styles.actionBarContainer}>
-        <TouchableOpacity onPress={() => {SheetManager.show("routine_sheet");}}>
-          <View style={styles.addButtonContainer}>
-            <Text style={styles.addButton}>+</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
+      <ScrollView style={styles.scrollView}>
+        {exercises.map((exercise, index) => 
+          <ExerciseDetail key={index} name={exercise}/>
+            // <View key={index}>
+            //     <Text>{exercise}</Text>
+            // </View>
+        )}
+      </ScrollView>
       <ActionSheet id="routine_sheet">
         <View style={styles.sheetButtons}>
           <TouchableOpacity onPress={() => {setToExerAmtScreen('push')}}>
@@ -66,9 +81,9 @@ export default function App() {
   return (
     <NavigationContainer style={styles.navContainer}>
       <Stack.Navigator initialRouteName='Home'>
-        <Stack.Screen name='Home' component={HomeScreen} style={styles.nav} options={{ headerShown: false }}/>
+        <Stack.Screen name='Home' component={HomeScreen} style={styles.nav} options={{ headerTitle: 'DB Randomizer', headerRight: () => (<TouchableOpacity onPress={() => {SheetManager.show("routine_sheet")}}><Text>+</Text></TouchableOpacity>)}}/>
         <Stack.Screen name='ExerAmt' component={ExerAmtScreen} style={styles.nav} options={{ headerShown: false }}/>
-        <Stack.Screen name='NewRoutine' component={NewRoutineScreen} style={styles.nav} options={{ headerShown: false }}/>
+        {/* <Stack.Screen name='NewRoutine' component={NewRoutineScreen} style={styles.nav} options={{ headerShown: false }}/> */}
       </Stack.Navigator>
     </NavigationContainer>
   );
