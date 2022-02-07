@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Text, TouchableOpacity, View, ScrollView, TextInput } from 'react-native';
+import exerciseDetailStyles from './ExerciseDetailStyles';
 
 
 function ExerciseDetail(props) {
@@ -21,27 +22,34 @@ function ExerciseDetail(props) {
     }
 
     return (
-        <View>
-            <Text>{props.name}</Text>
+        <View style={exerciseDetailStyles.container}>
+            <Text style={exerciseDetailStyles.text}>{props.name}</Text>
             {sets.map((set, index) =>
-                <View key={index}>
-                    <Text>{set[1]}</Text>
-                    <Text>{set[2]}</Text>
+                <View style={exerciseDetailStyles.addSetContainer} key={index}>
+                    <Text style={exerciseDetailStyles.text}>Rep:</Text>
+                    <Text style={exerciseDetailStyles.importantText}>{set[1]}</Text>
+                    <Text style={exerciseDetailStyles.text}>Weight:</Text>
+                    <Text style={exerciseDetailStyles.importantText}>{set[2]}</Text>
                 </View>
             )}
-            <TextInput keyboardType='numeric' placeholder='0' value={reps} onChangeText={(value) => {setReps(value)}}/>
-            <TextInput keyboardType='numeric' placeholder='0' value={weight} onChangeText={(value) => {setWeight(value)}}/>
-            <TouchableOpacity onPress={() => {
-                if (reps != '') {
-                    let newWeight;
-                    if (weight == '') {
-                        newWeight = '0';
-                    } else {
-                        newWeight = weight;
+            <View style={exerciseDetailStyles.addSetContainer}>
+                <Text style={exerciseDetailStyles.text}>REPS: </Text>
+                <TextInput style={exerciseDetailStyles.textInput} keyboardType='numeric' value={reps} onChangeText={(value) => {setReps(value)}}/>
+                <Text style={exerciseDetailStyles.text}>LBS: </Text>
+                <TextInput style={exerciseDetailStyles.textInput} keyboardType='numeric' value={weight} onChangeText={(value) => {setWeight(value)}}/>
+                <TouchableOpacity  style={exerciseDetailStyles.addSetButton} onPress={() => {
+                    if (reps != '') {
+                        let newWeight;
+                        if (weight == '') {
+                            newWeight = '0';
+                        } else {
+                            newWeight = weight;
+                        }
+                        saveSets(reps, newWeight);
                     }
-                    saveSets(reps, newWeight);
-                }
-                }}><Text>Add Set</Text></TouchableOpacity>
+                }}><Text style={exerciseDetailStyles.addButtonText}>ADD SET</Text></TouchableOpacity>
+            </View>
+            
         </View>
     )
 }

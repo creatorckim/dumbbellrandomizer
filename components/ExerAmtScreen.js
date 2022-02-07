@@ -155,11 +155,12 @@ function ExerAmtScreen({ navigation, route }) {
 
     return (
         <View style={exerAmtScreenStyles.container}>
+            <Text style={exerAmtScreenStyles.amountText}>Add Amount Of Exercises Per Muscle Group</Text>
             <ScrollView style={exerAmtScreenStyles.scrollView}>
                 {muscleGroup.map((muscle, index) => 
-                    <View key={index}>
-                        <Text>{muscle[0]}</Text>
-                        <NumericInput minValue={0} maxValue={5} value={muscle[1]} onChange={value => {updateMuscleGroup([muscle[0], value])}} />
+                    <View key={index} style={exerAmtScreenStyles.exerciseView}>
+                        <Text style={exerAmtScreenStyles.exerciseText}>{muscle[0].charAt(0).toUpperCase() + muscle[0].slice(1)}</Text>
+                        <NumericInput textColor={'#fff'} rounded borderColor={'#af216e'} leftButtonBackgroundColor={'#af216e'} rightButtonBackgroundColor={'#af216e'} minValue={0} maxValue={5} value={muscle[1]} onChange={value => {updateMuscleGroup([muscle[0], value])}} />
                     </View>
                 )}
             </ScrollView>

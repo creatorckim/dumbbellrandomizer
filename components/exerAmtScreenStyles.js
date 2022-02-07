@@ -6,10 +6,28 @@ const exerAmtScreenStyles = StyleSheet.create({
         height:'100%',
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: '#131620',
+    },
+    amountText: {
+        marginTop: 75,
+        color: '#fff',
+        fontSize: 15,
     },
     scrollView: {
         width: '100%',
         height:'100%',
+        marginTop: 25,
+        marginBottom: 100,
+    },
+    exerciseView: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: 25,
+    },
+    exerciseText: {
+        color: '#fff',
+        fontSize: 20,
     },
     actionBarContainer: {
         position: 'absolute',
@@ -21,23 +39,15 @@ const exerAmtScreenStyles = StyleSheet.create({
     addButtonContainer: {
         width: 60,
         height: 60,
-        backgroundColor: '#c51032',
+        backgroundColor: '#af216e',
         borderRadius: 60,
         justifyContent: 'center',
         alignItems: 'center',
     },
     addButton: {
         fontSize: 30,
-        color: '#000',
+        color: '#fff',
     },
-    sheetButtons: {
-        width: '100%',
-        height: 70,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderBottomWidth: 1,
-        borderBottomColor: '#000',
-    }
 });
 
 export default exerAmtScreenStyles;

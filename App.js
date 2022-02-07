@@ -10,6 +10,7 @@ import ExerciseDetail from './components/ExerciseDetail';
 import uuid from 'react-native-uuid';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CalendarView from './components/CalendarView';
+import WorkoutDate from './components/WorkoutDate';
 
 
 function HomeScreen({navigation, route}) {
@@ -21,7 +22,7 @@ function HomeScreen({navigation, route}) {
   const [dateArray, setDateArray] = useState([]);
 
   useEffect(() => {
-    getAllDate();
+    getAllData();
   }, [])
 
 
@@ -62,14 +63,14 @@ function HomeScreen({navigation, route}) {
     try {
       const jsonValue = JSON.stringify(value);
       await AsyncStorage.setItem(value.key, jsonValue)
-      getAllDate();
+      getAllData();
     } catch (e) {
       console.log(e);
     }
 
   }
 
-  const getAllDate = async () => {
+  const getAllData = async () => {
     try {  
       const keys = await AsyncStorage.getAllKeys();  
       const resultArray = [];
@@ -77,8 +78,8 @@ function HomeScreen({navigation, route}) {
         key.forEach(data => {
           // resultArray.push(JSON.parse(data[1]));
           let tempObj = JSON.parse(data[1]);
-          // console.log(tempObj.date);
-          resultArray.push(tempObj.date);
+          // console.log(JSON.parse(data[1]));
+          resultArray.push(tempObj);
         });
       });
 
@@ -93,49 +94,49 @@ function HomeScreen({navigation, route}) {
 
   return(
     <View style={styles.container}>
-      <StatusBar style="auto" />
+      <StatusBar style="light" />
       {
         exercises.length != 0 ? 
           <ScrollView style={styles.scrollView}>
             {exercises.map((exercise, index) => 
               <ExerciseDetail key={index} name={exercise} exerciseArray={exerciseArray} setExerciseArray={setExerciseArray}/>
             )}
-        </ScrollView> : <CalendarView dateArray={dateArray}/>
+        </ScrollView> : <CalendarView dateArray={dateArray} navigation={navigation}/>
       }
       {
         showButton ? 
         <View style={styles.actionBarContainer}>
           <TouchableOpacity onPress={() => {routineObj(routine, exerciseArray); setExercises([]); setShowButton(false)}}>
             <View style={styles.addButtonContainer}>
-                <Text style={styles.addButton}>+</Text>
+                <Text style={styles.addButton}>Save</Text>
             </View>
           </TouchableOpacity>
         </View> : null
       }
-      <ActionSheet id="routine_sheet">
+      <ActionSheet containerStyle={styles.actionsheet} id="routine_sheet">
         <View style={styles.sheetButtons}>
-          <TouchableOpacity onPress={() => {setToExerAmtScreen('push')}}>
-            <Text>PUSH</Text>
+          <TouchableOpacity style={styles.sheetBtnTO} onPress={() => {setToExerAmtScreen('push')}}>
+            <Text style={styles.buttonText}>PUSH</Text>
+          </TouchableOpacity>
+          </View>
+        <View style={styles.sheetButtons}>
+          <TouchableOpacity style={styles.sheetBtnTO} onPress={() => {setToExerAmtScreen('pull')}}>
+            <Text style={styles.buttonText}>PULL</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.sheetButtons}>
-          <TouchableOpacity onPress={() => {setToExerAmtScreen('pull')}}>
-            <Text>PULL</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.sheetButtons}>
-          <TouchableOpacity onPress={() => {setToExerAmtScreen('upper')}}>
-              <Text>UPPER</Text>
+          <TouchableOpacity style={styles.sheetBtnTO} onPress={() => {setToExerAmtScreen('upper')}}>
+              <Text style={styles.buttonText}>UPPER</Text>
             </TouchableOpacity>
           </View>
         <View style={styles.sheetButtons}>
-          <TouchableOpacity onPress={() => {setToExerAmtScreen('lower')}}>
-            <Text>LOWER</Text>
+          <TouchableOpacity style={styles.sheetBtnTO} onPress={() => {setToExerAmtScreen('lower')}}>
+            <Text style={styles.buttonText}>LOWER</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.sheetButtons}>
-          <TouchableOpacity onPress={() => {setToExerAmtScreen('full')}}>
-            <Text>FULL</Text>
+          <TouchableOpacity style={styles.sheetBtnTO} onPress={() => {setToExerAmtScreen('full')}}>
+            <Text style={styles.buttonText}>FULL</Text>
           </TouchableOpacity>
         </View>
       </ActionSheet>
@@ -150,13 +151,10 @@ export default function App() {
   return (
     <NavigationContainer style={styles.navContainer}>
       <Stack.Navigator initialRouteName='Home'>
-        <Stack.Screen name='Home' component={HomeScreen} style={styles.nav} options={{ headerTitle: 'DB Randomizer',  headerRight: () => ( <TouchableOpacity onPress={() => {SheetManager.show("routine_sheet")}}><Text>+</Text></TouchableOpacity>
-        //   <View style={{flexDirection:"row"}}>
-        //     <TouchableOpacity style={{margin: 10}} onPress={() => {SheetManager.show("routine_sheet")}}><Text>+</Text></TouchableOpacity>
-        //     <TouchableOpacity onPress={() => {}}><Text>+</Text></TouchableOpacity>
-        //  </View>
+        <Stack.Screen name='Home' component={HomeScreen} options={{ headerTitle: 'DB Randomizer', headerTitleStyle: {color: '#fff'}, headerStyle: {backgroundColor: '#131620'},  headerRight: () => ( <TouchableOpacity onPress={() => {SheetManager.show("routine_sheet")}}><Text style={styles.randomButton}>+</Text></TouchableOpacity>
         )}}/>
-        <Stack.Screen name='ExerAmt' component={ExerAmtScreen} style={styles.nav} options={{ headerShown: false }}/>
+        <Stack.Screen name='ExerAmt' component={ExerAmtScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name='WorkoutDate' component={WorkoutDate} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Text, TouchableOpacity, View, } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 
 function CalendarView(props) {
@@ -7,16 +6,17 @@ function CalendarView(props) {
     const [workoutDays, setWorkoutDays] = useState({});
 
     useEffect(() => {
-        // console.log(props.dateArray);
-        markDays(props.dateArray)
-    }, [props.dateArray])
+        if (props.dateArray && props.dateArray[0]) {
+            markDays(props.dateArray)
+          }
+    }, [props.dateArray.length != 0])
 
     const markDays = (array) => {
         let customMarkedDates = {};
         array.map((day) => {
-            customMarkedDates[day] = {
+            customMarkedDates[day.date] = {
                 selected: true,
-                selectedColor: '#ffc45d'
+                selectedColor: '#af216e'
             };
         });
 
@@ -25,30 +25,33 @@ function CalendarView(props) {
     }
 
     return (
-        <View>
-            {props.dateArray.map((date, index) => {
-                <Text key={index}>{date}</Text>
-            })}
-            <Calendar
-                    disableAllTouchEventsForDisabledDays={true}
-                    enableSwipeMonths={true}
-                    markedDates={workoutDays}
-                    theme={{
-                        backgroundColor: '#191B1D',
-                        calendarBackground: '#191B1D',
-                        arrowColor: '#ffc45d',
-                        textSectionTitleColor: '#ffc45d',
-                        monthTextColor: '#ffc45d',
-                        selectedDayTextColor: '#191B1D',
-                        dayTextColor: '#fff',
-                        todayTextColor: '#ffc45d',
-                        textDisabledColor: '#808080',
-                    }}
-                    style={{
-                        width: '100%',
-                    }}
-                />
-        </View>
+        <Calendar
+            disableAllTouchEventsForDisabledDays={true}
+            enableSwipeMonths={true}
+            markedDates={workoutDays}
+            onDayPress={day => {
+                for (let i = 0; i < props.dateArray.length; i++) {
+                    if (day.dateString == props.dateArray[i].date) {
+                        // console.log(props.dateArray[i].date)
+                        props.navigation.navigate('WorkoutDate', props.dateArray[i]);
+                    }
+                }
+            }}
+            theme={{
+                backgroundColor: '#131620',
+                calendarBackground: '#131620',
+                arrowColor: '#fff',
+                textSectionTitleColor: '#fff',
+                monthTextColor: '#fff',
+                dayTextColor: '#fff',
+                todayTextColor: '#af216e',
+                textDisabledColor: '#808080',
+            }}
+            style={{
+                width: '100%',
+                marginTop: 80,
+            }}
+        />
     )
 }
 
