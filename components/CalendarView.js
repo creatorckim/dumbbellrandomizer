@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Calendar } from 'react-native-calendars';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function CalendarView(props) {
+function CalendarView({navigation}) {
 
     const [workoutDays, setWorkoutDays] = useState({});
+    const [dateArray, setDateArray] = useState([]);
 
     useEffect(() => {
-        if (props.dateArray && props.dateArray[0]) {
-            markDays(props.dateArray)
+      getAllData();
+    }, [])
+
+    useEffect(() => {
+        if (dateArray && dateArray[0]) {
+            markDays(dateArray)
           }
-    }, [props.dateArray.length != 0])
+    }, [dateArray.length != 0])
 
     const markDays = (array) => {
         let customMarkedDates = {};
@@ -24,16 +30,33 @@ function CalendarView(props) {
 
     }
 
+    const getAllData = async () => {
+        try {  
+          const keys = await AsyncStorage.getAllKeys();  
+          const resultArray = [];
+          await AsyncStorage.multiGet(keys).then(key => {
+            key.forEach(data => {
+              let tempObj = JSON.parse(data[1]);
+              resultArray.push(tempObj);
+            });
+          });
+    
+          setDateArray(resultArray);
+    
+       } catch (e) {
+          console.log(e);
+       }
+      }
+
     return (
         <Calendar
             disableAllTouchEventsForDisabledDays={true}
             enableSwipeMonths={true}
             markedDates={workoutDays}
             onDayPress={day => {
-                for (let i = 0; i < props.dateArray.length; i++) {
-                    if (day.dateString == props.dateArray[i].date) {
-                        // console.log(props.dateArray[i].date)
-                        props.navigation.navigate('WorkoutDate', props.dateArray[i]);
+                for (let i = 0; i < dateArray.length; i++) {
+                    if (day.dateString == dateArray[i].date) {
+                        navigation.navigate('WorkoutDate', dateArray[i]);
                     }
                 }
             }}

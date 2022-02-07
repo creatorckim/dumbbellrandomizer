@@ -10,6 +10,12 @@ const styles = StyleSheet.create({
       width: '100%',
       height:'100%',
       backgroundColor: '#131620',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    noExText: {
+      fontSize: 20,
+      color: '#fff',
     },
     scrollView: {
       width: '100%',
@@ -26,18 +32,28 @@ const styles = StyleSheet.create({
       alignItems: 'center',
     },
     addButtonContainer: {
-      width: 100,
-      height: 50,
+      width: 60,
+      height: 60,
       backgroundColor: '#af216e',
-      // borderRadius: 60,
-      borderRadius: 2,
+      borderRadius: 60,
       justifyContent: 'center',
       alignItems: 'center',
     },
     addButton: {
+      fontSize: 30,
+      color: '#fff',
+    },
+    saveButtonContainer: {
+      width: 100,
+      height: 50,
+      backgroundColor: '#af216e',
+      borderRadius: 2,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    saveButton: {
       fontSize: 20,
       color: '#fff',
-      fontStyle: 'italic',
     },
     actionsheet: {
       backgroundColor: '#131620',
@@ -63,10 +79,8 @@ const styles = StyleSheet.create({
       fontSize: 15,
       fontWeight: "bold",
     },
-    randomButton: {
-      color: '#af216e',
-      fontSize: 35,
-      marginRight: 20,
+    calendarButton: {
+      marginRight: 15,
     },
 });
 

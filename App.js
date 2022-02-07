@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react'
 import { Text, TouchableOpacity, View, ScrollView } from 'react-native';
 import styles from './style';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation, CommonActions } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ActionSheet, { SheetManager } from "react-native-actions-sheet";
 import ExerAmtScreen from './components/ExerAmtScreen';
@@ -11,6 +11,7 @@ import uuid from 'react-native-uuid';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CalendarView from './components/CalendarView';
 import WorkoutDate from './components/WorkoutDate';
+import { AntDesign } from '@expo/vector-icons';
 
 
 function HomeScreen({navigation, route}) {
@@ -35,6 +36,9 @@ function HomeScreen({navigation, route}) {
 
   }, [route.params?.exerciseList])
 
+  // const setToCalendarScreen = (dateArray) => {
+  //   navigation.navigate('Calendar', dateArray);
+  // }
 
   const setToExerAmtScreen = (pickedRoutine) => {
     SheetManager.hideAll();
@@ -101,17 +105,23 @@ function HomeScreen({navigation, route}) {
             {exercises.map((exercise, index) => 
               <ExerciseDetail key={index} name={exercise} exerciseArray={exerciseArray} setExerciseArray={setExerciseArray}/>
             )}
-        </ScrollView> : <CalendarView dateArray={dateArray} navigation={navigation}/>
+        </ScrollView> : <Text style={styles.noExText}>No Exercise Routine</Text>
       }
       {
         showButton ? 
         <View style={styles.actionBarContainer}>
           <TouchableOpacity onPress={() => {routineObj(routine, exerciseArray); setExercises([]); setShowButton(false)}}>
-            <View style={styles.addButtonContainer}>
-                <Text style={styles.addButton}>Save</Text>
+            <View style={styles.saveButtonContainer}>
+                <Text style={styles.saveButton}>Save</Text>
             </View>
           </TouchableOpacity>
-        </View> : null
+        </View> : <View style={styles.actionBarContainer}>
+                    <TouchableOpacity onPress={() => {SheetManager.show("routine_sheet")}}>
+                      <View style={styles.addButtonContainer}>
+                        <Text style={styles.addButton}>+</Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
       }
       <ActionSheet containerStyle={styles.actionsheet} id="routine_sheet">
         <View style={styles.sheetButtons}>
@@ -148,13 +158,16 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
 
+  // const navigation = useNavigation();
+
   return (
     <NavigationContainer style={styles.navContainer}>
       <Stack.Navigator initialRouteName='Home'>
-        <Stack.Screen name='Home' component={HomeScreen} options={{ headerTitle: 'DB Randomizer', headerTitleStyle: {color: '#fff'}, headerStyle: {backgroundColor: '#131620'},  headerRight: () => ( <TouchableOpacity onPress={() => {SheetManager.show("routine_sheet")}}><Text style={styles.randomButton}>+</Text></TouchableOpacity>
-        )}}/>
+        <Stack.Screen name='Home' component={HomeScreen} options={({navigation}) => ({ headerTitle: 'DB Randomizer', headerTitleStyle: {color: '#fff'}, headerStyle: {backgroundColor: '#0F1119'},  headerRight: () => ( <TouchableOpacity style={styles.calendarButton} onPress={() => {navigation.navigate('Calendar')}}><AntDesign name='calendar' size={25} color='#af216e' /></TouchableOpacity>
+        )})}/>
         <Stack.Screen name='ExerAmt' component={ExerAmtScreen} options={{ headerShown: false }}/>
         <Stack.Screen name='WorkoutDate' component={WorkoutDate} options={{ headerShown: false }}/>
+        <Stack.Screen name='Calendar' component={CalendarView} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
