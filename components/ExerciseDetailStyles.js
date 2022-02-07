@@ -7,7 +7,7 @@ const exerciseDetailStyles = StyleSheet.create({
     },
     text: {
         color: '#fff',
-        fontSize: 20,
+        fontSize: 15,
     },
     importantText: {
         color: '#af216e',
@@ -32,7 +32,7 @@ const exerciseDetailStyles = StyleSheet.create({
     },
     addButtonText: {
         color: '#fff',
-        fontSize: 20,
+        fontSize: 15,
         padding: 5,
         
     }

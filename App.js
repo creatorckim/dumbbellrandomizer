@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react'
 import { Text, TouchableOpacity, View, ScrollView } from 'react-native';
 import styles from './style';
-import { NavigationContainer, useNavigation, CommonActions } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ActionSheet, { SheetManager } from "react-native-actions-sheet";
 import ExerAmtScreen from './components/ExerAmtScreen';
@@ -26,7 +26,6 @@ function HomeScreen({navigation, route}) {
     getAllData();
   }, [])
 
-
   useEffect(() => {
 
       if (route.params?.exerciseList) {
@@ -35,10 +34,6 @@ function HomeScreen({navigation, route}) {
       }
 
   }, [route.params?.exerciseList])
-
-  // const setToCalendarScreen = (dateArray) => {
-  //   navigation.navigate('Calendar', dateArray);
-  // }
 
   const setToExerAmtScreen = (pickedRoutine) => {
     SheetManager.hideAll();
@@ -80,16 +75,13 @@ function HomeScreen({navigation, route}) {
       const resultArray = [];
       await AsyncStorage.multiGet(keys).then(key => {
         key.forEach(data => {
-          // resultArray.push(JSON.parse(data[1]));
           let tempObj = JSON.parse(data[1]);
-          // console.log(JSON.parse(data[1]));
           resultArray.push(tempObj);
         });
       });
 
       setDateArray(resultArray);
 
-      // console.log(resultArray);
    } catch (e) {
       console.log(e);
    }
@@ -158,7 +150,6 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
 
-  // const navigation = useNavigation();
 
   return (
     <NavigationContainer style={styles.navContainer}>

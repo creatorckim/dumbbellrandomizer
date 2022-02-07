@@ -5,7 +5,6 @@ import exerAmtScreenStyles from '../components/exerAmtScreenStyles';
 import { back, bicep, forearm, postdelt, trapezius, chest, shoulder, tricep, quadricep, hamstring, glute, calf, ab, oblique } from '../exercises';
 
 
-
 function ExerAmtScreen({ navigation, route }) {
 
     const [muscleGroup, setMuscleGroup] = useState([]);
@@ -160,7 +159,7 @@ function ExerAmtScreen({ navigation, route }) {
                 {muscleGroup.map((muscle, index) => 
                     <View key={index} style={exerAmtScreenStyles.exerciseView}>
                         <Text style={exerAmtScreenStyles.exerciseText}>{muscle[0].charAt(0).toUpperCase() + muscle[0].slice(1)}</Text>
-                        <NumericInput textColor={'#fff'} rounded borderColor={'#af216e'} leftButtonBackgroundColor={'#af216e'} rightButtonBackgroundColor={'#af216e'} minValue={0} maxValue={5} value={muscle[1]} onChange={value => {updateMuscleGroup([muscle[0], value])}} />
+                        <NumericInput totalWidth={120} totalHeight={40}  textColor={'#fff'} rounded borderColor={'#af216e'} leftButtonBackgroundColor={'#af216e'} rightButtonBackgroundColor={'#af216e'} minValue={0} maxValue={5} value={muscle[1]} onChange={value => {updateMuscleGroup([muscle[0], value])}} />
                     </View>
                 )}
             </ScrollView>

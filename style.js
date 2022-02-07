@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
       color: '#fff',
     },
     saveButtonContainer: {
-      width: 100,
+      width: 80,
       height: 50,
       backgroundColor: '#af216e',
       borderRadius: 2,

@@ -34,18 +34,4 @@ const workoutDateStyles = StyleSheet.create({
     }
   });
 
-// const workoutDateStyles = StyleSheet.create({
-//     container: {
-//         width: '100%',
-//         height: '100%',
-//         backgroundColor: '#131620',
-//         justifyContent: 'center',
-//     },
-//     setContainer: {
-//         flexDirection: 'row',
-//         justifyContent: "space-evenly",
-//     },
-
-// })
-
 export default workoutDateStyles;
