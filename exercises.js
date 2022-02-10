@@ -17,7 +17,7 @@ export const back = [
   {
     'id': '4',
     'bodypart': 'back',
-    'name': 'One Arm Row',
+    'name': 'Tripod Row',
   },
   {
     'id': '5',
@@ -290,6 +290,11 @@ export const tricep = [
     'id': '8',
     'bodypart': 'tricep',
     'name': 'Close Push-up',
+  },
+  {
+    'id': '9',
+    'bodypart': 'tricep',
+    'name': 'Incline DB Kickback',
   },
 ]
 
